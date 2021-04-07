@@ -67,7 +67,7 @@ def adjust_gamma(image, gamma=1.0):
 	# apply gamma correction using the lookup table
 	return cv2.LUT(image, table)
 
-gamma_value = st.slider('Gamma',max_value=2.0,min_value=0.01,step=0.01)
+gamma_value = st.slider('Gamma',max_value=1.0,min_value=0.01,step=0.01, value= 0.2)
 
 try:
     # opencv_image = image_resize(opencv_image, width=768)
