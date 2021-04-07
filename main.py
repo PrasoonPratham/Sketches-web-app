@@ -1,9 +1,15 @@
-import streamlit as st 
+import streamlit as st
 import cv2
 import numpy as np
 
-uploaded_file = st.file_uploader("Upload Files",type=['jpeg','jpg','png'])
+st.title("Sketches with Python")
 
+st.write(
+    """This is a web-app that will create a pencil sketch of the image that you provide, start by uploading an image 👇
+    """
+)
+
+uploaded_file = st.file_uploader("Upload Files", type=["jpeg", "jpg", "png", "jiff"])
 
 if uploaded_file is not None:
     # Convert the file to an opencv image.
@@ -12,7 +18,8 @@ if uploaded_file is not None:
 
 
 def dodge(x, y):
-    return cv2.divide(x,  255 - y, scale=256)
+    return cv2.divide(x, 255 - y, scale=256)
+
 
 def sketch(img):
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -21,13 +28,12 @@ def sketch(img):
     final_img = dodge(img_gray, img_smoothing)
     return final_img
 
-st.title('Sketches with Python')
 
-col1, col2 = st.beta_columns(2)
+try:
+    col1, col2 = st.beta_columns(2)
 
-col1.header("Original")
-col1.image(opencv_image, use_column_width=True, channels="BGR")
+    col1.image(opencv_image, use_column_width=True, channels="BGR", caption="Orignal")
 
-col2.header("Sketch")
-col2.image(sketch(opencv_image), use_column_width=True)
-
+    col2.image(sketch(opencv_image), use_column_width=True, caption="Sketch")
+except:
+    pass
