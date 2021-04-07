@@ -16,8 +16,10 @@ if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     opencv_image = cv2.imdecode(file_bytes, 1)
 
+
 def dodge(x, y):
     return cv2.divide(x, 255 - y, scale=256)
+
 
 def sketch(img):
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -27,7 +29,8 @@ def sketch(img):
     # final_img = cv2.add(final_img,np.array([-10.0]))
     return final_img
 
-def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
+
+def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     # initialize the dimensions of the image to be resized and
     # grab the image size
     dim = None
@@ -53,31 +56,46 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
         dim = (width, int(h * r))
 
     # resize the image
-    resized = cv2.resize(image, dim, interpolation = inter)
+    resized = cv2.resize(image, dim, interpolation=inter)
 
     # return the resized image
     return resized
 
-def adjust_gamma(image, gamma=1.0):
-	# build a lookup table mapping the pixel values [0, 255] to
-	# their adjusted gamma values
-	invGamma = 1.0 / gamma
-	table = np.array([((i / 255.0) ** invGamma) * 255
-		for i in np.arange(0, 256)]).astype("uint8")
-	# apply gamma correction using the lookup table
-	return cv2.LUT(image, table)
 
-gamma_value = st.slider('Gamma',max_value=1.0,min_value=0.01,step=0.01, value= 0.2)
+def adjust_gamma(image, gamma=1.0):
+    # build a lookup table mapping the pixel values [0, 255] to
+    # their adjusted gamma values
+    invGamma = 1.0 / gamma
+    table = np.array(
+        [((i / 255.0) ** invGamma) * 255 for i in np.arange(0, 256)]
+    ).astype("uint8")
+    # apply gamma correction using the lookup table
+    return cv2.LUT(image, table)
+
+
+def get_image_download_link(img):
+    """Generates a link allowing the PIL image to be downloaded
+    in:  PIL image
+    out: href string
+    """
+    buffered = BytesIO()
+    img.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    href = f'<a href="data:file/jpg;base64,{img_str}">Download result</a>'
+    return href
+
 
 try:
+    gamma_value = st.slider("Gamma", max_value=0.5, min_value=0.1, step=0.1, value=0.2)
+
     # opencv_image = image_resize(opencv_image, width=768)
-
-    
-
+    result = adjust_gamma(sketch(opencv_image), gamma=gamma_value)
     col1, col2 = st.beta_columns(2)
 
     col1.image(opencv_image, use_column_width=True, channels="BGR", caption="Orignal")
 
-    col2.image(adjust_gamma(sketch(opencv_image), gamma= gamma_value), use_column_width=True, caption="Sketch")
+    col2.image(result, use_column_width=True, caption="Sketch")
+
+    st.markdown(get_image_download_link(result), unsafe_allow_html=True)
 except:
     pass
