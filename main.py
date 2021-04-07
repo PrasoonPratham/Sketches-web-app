@@ -67,13 +67,17 @@ def adjust_gamma(image, gamma=1.0):
 	# apply gamma correction using the lookup table
 	return cv2.LUT(image, table)
 
+gamma_value = st.slider('Gamma',max_value=2.0,min_value=0.01,step=0.01)
+
 try:
     # opencv_image = image_resize(opencv_image, width=768)
+
+    
 
     col1, col2 = st.beta_columns(2)
 
     col1.image(opencv_image, use_column_width=True, channels="BGR", caption="Orignal")
 
-    col2.image(adjust_gamma(sketch(opencv_image), gamma= 0.1), use_column_width=True, caption="Sketch")
+    col2.image(adjust_gamma(sketch(opencv_image), gamma= gamma_value), use_column_width=True, caption="Sketch")
 except:
     pass
