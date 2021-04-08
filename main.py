@@ -86,7 +86,7 @@ def get_image_download_link(img):
 
 
 try:
-    gamma_value = st.slider("Gamma", max_value=0.5, min_value=0.1, step=0.1, value=0.2)
+    gamma_value = st.slider("Gamma", max_value=0.5, min_value=0.01, step=0.0001, value=0.2)
 
     # opencv_image = image_resize(opencv_image, width=768)
     result = adjust_gamma(sketch(opencv_image), gamma=gamma_value)
@@ -94,8 +94,6 @@ try:
 
     col1.image(opencv_image, use_column_width=True, channels="BGR", caption="Orignal")
 
-    col2.image(result, use_column_width=True, caption="Sketch")
-
-    st.markdown(get_image_download_link(result), unsafe_allow_html=True)
+    col2.image(result, use_column_width=True, caption="Sketch")  
 except:
     pass
