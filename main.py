@@ -73,20 +73,10 @@ def adjust_gamma(image, gamma=1.0):
     return cv2.LUT(image, table)
 
 
-def get_image_download_link(img):
-    """Generates a link allowing the PIL image to be downloaded
-    in:  PIL image
-    out: href string
-    """
-    buffered = BytesIO()
-    img.save(buffered, format="JPEG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    href = f'<a href="data:file/jpg;base64,{img_str}">Download result</a>'
-    return href
-
-
 try:
-    gamma_value = st.slider("Gamma", max_value=0.5, min_value=0.01, step=0.0001, value=0.2)
+    gamma_value = st.slider(
+        "Gamma", max_value=0.5, min_value=0.01, step=0.0001, value=0.2
+    )
 
     # opencv_image = image_resize(opencv_image, width=768)
     result = adjust_gamma(sketch(opencv_image), gamma=gamma_value)
@@ -94,6 +84,6 @@ try:
 
     col1.image(opencv_image, use_column_width=True, channels="BGR", caption="Orignal")
 
-    col2.image(result, use_column_width=True, caption="Sketch")  
+    col2.image(result, use_column_width=True, caption="Sketch")
 except:
     pass
