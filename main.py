@@ -75,8 +75,15 @@ def adjust_gamma(image, gamma=1.0):
 
 try:
     gamma_value = st.slider(
-        "Gamma", max_value=0.5, min_value=0.01, step=0.0001, value=0.2
+        "Gamma", max_value=0.5, min_value=0.01, step=0.0001, value=0.25
     )
+
+    st.write(
+        """Adjust the gamma slider to your liking ☝ 
+    """
+    )
+
+    st.write("Lesser Gamma = Darker / sharper, More Gamma = Lighter / softer")
 
     # opencv_image = image_resize(opencv_image, width=768)
     result = adjust_gamma(sketch(opencv_image), gamma=gamma_value)
