@@ -87,7 +87,7 @@ try:
 
     # opencv_image = image_resize(opencv_image, width=768)
     result = adjust_gamma(sketch(opencv_image), gamma=gamma_value)
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
 
     col1.image(opencv_image, use_column_width=True, channels="BGR", caption="Orignal")
 
